@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terabox & Mega Downloader</title>
+</head>
+<body>
+    <h2>Enter Terabox or Mega Link:</h2>
+    <input type="text" id="linkInput" placeholder="Paste your link here...">
+    <button onclick="processLink('watch')">Watch</button>
+    <button onclick="processLink('download')">Download</button>
+
+    <script>
+        function processLink(action) {
+            let link = document.getElementById("linkInput").value;
+            if (!link) {
+                alert("Please enter a link!");
+                return;
+            }
+            let backendURL = window.location.origin;  // Auto-detect backend URL
+            if (action === "watch") {
+                window.open(`${backendURL}/watch?link=${encodeURIComponent(link)}`, "_blank");
+            } else if (action === "download") {
+                fetch(`${backendURL}/download?link=${encodeURIComponent(link)}`)
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = data.download_url;
+                })
+                .catch(error => console.error("Error:", error));
+            }
+        }
+    </script>
+</body>
+</html>
